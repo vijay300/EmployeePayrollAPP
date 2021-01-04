@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/employee_payroll_app.css">
 	<title>Employee payroll form</title>
 	<script defer src="../js/employee_payroll.js"></script>
+	<script defer src="../js/EmployeePayrollData.js"></script>
 </head>
 <body>
 	<header class="header-content header">
@@ -18,12 +19,13 @@
       </div>
     </div>
 	</header>
-	<div class="form-content">
-		<form class="form" action="#" onsubmit="save(event);return false">
+	<div id="formId" class="form-content">
+		<form class="form" action="#" onsubmit="save()">
 			<div class="form-head">Employee Payroll form</div>
 			<div class="row-content">
 				<label class="label text" for="name">Name</label>
 				<input class="input" type="text" id="name" name="name" placeholder="Enter Name" required>
+				<error-output class="text-error" for="text"></error-output>
 			</div>
 			<div class="row-content">
 				<label class="label text" for="profile">Profile image</label>
@@ -47,36 +49,6 @@
 						<input type="radio" id="profile1" name="profile"
 						      value="../assets//profile-images/Ellipse -7.png" required>
 						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -7.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -2.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -2.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -4.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -4.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -5.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -5.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -6.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -6.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -10.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -10.png">
-					</label>
-					<label>
-						<input type="radio" id="profile1" name="profile"
-						      value="../assets//profile-images/Ellipse -9.png" required>
-						<img class="profile" id="image1" src="../assets/profile-images/Ellipse -9.png">
 					</label>
 				</div>
 			</div>
