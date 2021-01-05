@@ -20,6 +20,44 @@ window.addEventListener('DOMContentLoaded', (event) => {
     salary.addEventListener('input', function() {
         output.textContent = salary.value; 
     });
+
+    var d = new Date(); 
+    const daySel = document.querySelector('#day');
+    const monthSel = document.querySelector('#month');
+    const dateError = document.querySelector('.date-error');
+    const yearSel = document.querySelector('#year');
+    daySel.addEventListener('input', function() {
+        if (yearSel.value == d.getFullYear()) {
+            if (monthSel.value != month[d.getMonth()]) {
+                dateError.textContent = 'Invalid Date';
+            } else {
+                if (daySel.value > d.getDate())
+                    dateError.textContent = 'Invalid Date';
+                else dateError.textContent = '';
+            }
+        }
+        else if (((yearSel.value % 4 == 0) && (yearSel.value % 100 != 0)) || (yearSel.value % 400 == 0)) {
+            if (monthSel.value == "Febuary") {
+                if (daySel.value > 29) 
+                    dateError.textContent = 'Invalid date';
+                else dateError.textContent = '';
+            } else if (monthSel.value == "April" || monthSel.value == "June" || monthSel.value == "September" || monthSel.value == "November") {
+                if (daySel.value > 30) 
+                    dateError.textContent = 'Invalid date';
+                else dateError.textContent = '';
+            } else dateError.textContent = '';
+        } else {
+            if (monthSel.value == "Febuary") {
+                if (daySel.value > 28) 
+                    dateError.textContent = 'Invalid date';
+                else dateError.textContent = '';
+            } else if (monthSel.value == "April" || monthSel.value == "June" || monthSel.value == "September" || monthSel.value == "November") {
+                if (daySel.value > 30) 
+                    dateError.textContent = 'Invalid date';
+                else dateError.textContent = '';
+            } else dateError.textContent = '';
+        }    
+    });
 });
 
 const save = () => {
@@ -76,6 +114,22 @@ function createAndUpdateStorage(employeePayrollData) {
     alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList))
 }
+var month = ["January","Febuary","March","April","May","June","July","August","September","October","November","December"];
+
+for (i = 0; i < month.length; i++) {
+  var opt = document.createElement("option");
+  document.getElementById("month").innerHTML += '<option id="' + i + '">' + month[i] + '</option>';
+}
+for (i = 1; i <= 31; i++) {
+    var opt = document.createElement("option");
+    document.getElementById("day").innerHTML += '<option id="' + i + '">' + i + '</option>';
+}
+for (i = 1900; i <= 2021; i++) {
+    var opt = document.createElement("option");
+    document.getElementById("year").innerHTML += '<option id="' + i + '">' + i + '</option>';
+}
+
+
 
 const resetForm = () => {
     setValue('#name','');
