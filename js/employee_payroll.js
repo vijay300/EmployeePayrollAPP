@@ -82,9 +82,9 @@ const createEmployeePayroll = () => {
     employeePayrollData.department = getselectedValues('[name=dept]');
     employeePayrollData.salary = getInputValueById('#salary');
     employeePayrollData.note = getInputValueById('#notes');
-    let date = getInputValueById('#day') + "/" + getInputValueById('#month') + "/" +
+    let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
                 getInputValueById('#year');
-    employeePayrollData.startDate = date;
+    employeePayrollData.date = Date.parse(date);
     alert(employeePayrollData.toString());
     return employeePayrollData;
 }
@@ -124,7 +124,7 @@ for (i = 1; i <= 31; i++) {
     var opt = document.createElement("option");
     document.getElementById("day").innerHTML += '<option id="' + i + '">' + i + '</option>';
 }
-for (i = 1900; i <= 2021; i++) {
+for (i = 2021; i >= 1950; i--) {
     var opt = document.createElement("option");
     document.getElementById("year").innerHTML += '<option id="' + i + '">' + i + '</option>';
 }
