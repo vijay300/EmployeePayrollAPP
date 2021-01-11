@@ -8,6 +8,8 @@
 	<title>Employee payroll form</title>
 	<script defer src="../js/employee_payroll.js"></script>
 	<script defer src="../js/EmployeePayrollData.js"></script>
+	<script src="../js/utility.js"></script>
+    <script src="../js/site_properties.js"></script>
 </head>
 <body>
 	<header class="header-content header">
@@ -96,7 +98,7 @@
 				<textarea id="notes" class="input" name="Notes" placeholder="Enter Text" style="height: 100px;"></textarea>
 			</div>
 			<div class="button-content">
-				<a href="../pages/Employee_HomePage.html" class="resetButton button cancelButton">Cancel</a>
+				<a href="../pages/Employee_HomePage.html" id="cancelButton" class="resetButton button cancelButton">Cancel</a>
 				<div>
 					<button type="submit" class="button submitButton" id="submitButton">Submit</button>
 					<button type="reset" class="resetButton button">Reset</button>

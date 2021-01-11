@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
         try {
-            (new EmployeePayrollData()).name = name.value;
+            checkName(name.value);
             textError.textContent = "";
         } catch (e) {
             textError.textContent = e;
@@ -24,44 +24,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
         output.textContent = salary.value; 
     });
 
-    var d = new Date(); 
-    const daySel = document.querySelector('#day');
-    const monthSel = document.querySelector('#month');
+    const date = document.querySelector('#startDate');
     const dateError = document.querySelector('.date-error');
-    const yearSel = document.querySelector('#year');
-    daySel.addEventListener('input', function() {
-        if (yearSel.value == d.getFullYear()) {
-            if (monthSel.value != month[d.getMonth()]) {
-                dateError.textContent = 'Invalid Date';
-            } else {
-                if (daySel.value > d.getDate())
-                    dateError.textContent = 'Invalid Date';
-                else dateError.textContent = '';
-            }
+    date.addEventListener('input', function() {
+        let startDate = getInputValueById('#day') + " " + getInputValueById('#month') + " "
+                        + getInputValueById('#year');
+        try {
+            checkStartDate(new Date(Date.parse(startDate)));
+            dateError.textContent = ""
+        } catch (e) {
+            dateError.textContent = e;
         }
-        else if (((yearSel.value % 4 == 0) && (yearSel.value % 100 != 0)) || (yearSel.value % 400 == 0)) {
-            if (monthSel.value == "Febuary") {
-                if (daySel.value > 29) 
-                    dateError.textContent = 'Invalid date';
-                else dateError.textContent = '';
-            } else if (monthSel.value == "April" || monthSel.value == "June" || monthSel.value == "September" || monthSel.value == "November") {
-                if (daySel.value > 30) 
-                    dateError.textContent = 'Invalid date';
-                else dateError.textContent = '';
-            } else dateError.textContent = '';
-        } else {
-            if (monthSel.value == "Febuary") {
-                if (daySel.value > 28) 
-                    dateError.textContent = 'Invalid date';
-                else dateError.textContent = '';
-            } else if (monthSel.value == "April" || monthSel.value == "June" || monthSel.value == "September" || monthSel.value == "November") {
-                if (daySel.value > 30) 
-                    dateError.textContent = 'Invalid date';
-                else dateError.textContent = '';
-            } else dateError.textContent = '';
-        }    
     });
-
     checkForUpdate();
 });
 
@@ -76,11 +50,11 @@ const setForm = () => {
     setValue('#name', employeePayrollObj._name);
     setSelectedValues('[name=profile]', employeePayrollObj._profilePic);
     setSelectedValues('[name=gender]', employeePayrollObj._gender);
-    setSelectedValues('[name=department]', employeePayrollObj._department);
+    setSelectedValues('[name=dept]', employeePayrollObj._department);
     setValue('#salary', employeePayrollObj._salary);
-    setTextValue('.salar_output', employeePayrollObj._salary);
+    setTextValue('.salary_output', employeePayrollObj._salary);
     setValue('#notes', employeePayrollObj._note);
-    let date = stringifyDate(employeePayrollObj._startDate).split(" ");
+    let date = stringifyDate(employeePayrollObj.startDate).split(" ");
     setValue('#day', date[0]);
     setValue('#month', date[1]);
     setValue('#year', date[2]);
@@ -91,15 +65,40 @@ const save = (event) => {
      event.stopPropagation();
     try {
         setEmployeePayrollObject();
-        createAndUpdateStorage();
-        resetForm();
-        window.location.replace(site_properties.home_page);
+        if (site_properties.use_local_storage.match("true")) {
+            createAndUpdateStorage();
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        } else {
+            createOrUpdateEmployeePayroll();
+        }
+        
     } catch (e) {
         return;
     }
 }
 
+const createOrUpdateEmployeePayroll =() => {
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if(isUpdate) {
+        methodCall = "PUT";
+        postURL = postURL + employeePayrollObj.id.toString();
+    }
+    makPromiseCall(methodCall, postURL, true, employeePayrollObj)
+        .then(resposiveText => {
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        })
+        .catch(error => {
+            throw error;
+        });
+}
+
 const setEmployeePayrollObject = () => {
+    if(!isUpdate && site_properties.use_local_storage.match("true")) {
+        employeePayrollObj.id = createNewEmployeeId();
+    }
     employeePayrollObj._name = getInputValueById('#name');
     employeePayrollObj._profilePic = getselectedValues('[name=profile]').pop();
     employeePayrollObj._gender = getselectedValues('[name=gender]').pop();
@@ -148,43 +147,19 @@ const getInputValueById = (id) => {
 const createAndUpdateStorage = () => {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
     if (employeePayrollList) {
-        let empPayrollData = employeePayrollList.find(empData => empData._id == employeePayrollObj._id);
+        let empPayrollData = employeePayrollList.find(empData => empData.id == employeePayrollObj.id);
         if( !empPayrollData) {
-            employeePayrollList.push(createEmployeePayrollData());
+            employeePayrollList.push(employeePayrollObj);
         } else {
-            const index = employeePayrollList.map(empData => empData._id)
-                                             .indexOf(empPayrollData._id);
-            employeePayrollList.splice(index, 1, createEmployeePayrollData(empPayrollData._id));
+            const index = employeePayrollList.map(empData => empData.id)
+                                             .indexOf(empPayrollData.id);
+            employeePayrollList.splice(index, 1, employeePayrollObj);
         }
     } else {
         employeePayrollList = [createEmployeePayrollData()]
     }
     alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList))
-}
-
-const createEmployeePayrollData = (id) => {
-    let employeePayrollData = new EmployeePayrollData();
-    if (!id) employeePayrollData.id = createNewEmployeeId();
-    else employeePayrollData.id = id;
-    setEmployeePayrollData(employeePayrollData);
-    return employeePayrollData;
-}
-
-const setEmployeePayrollData = (employeePayrollData) => {
-    try {
-        employeePayrollData.name = employeePayrollObj._name;
-    } catch (e) {
-        setTextValue('.text-error', e);
-        throw e;
-    }
-    employeePayrollData.profilePic = employeePayrollObj._profilePic;
-    employeePayrollData.gender = employeePayrollObj._gender;
-    employeePayrollData.department = employeePayrollObj._department;
-    employeePayrollData.salary = employeePayrollObj._salary;
-    employeePayrollData.note = employeePayrollObj._note;
-    employeePayrollData.startDate = employeePayrollObj._startDate;
-    alert(employeePayrollData.toString());
 }
 
 const createNewEmployeeId = () => {
@@ -255,3 +230,36 @@ const setSelectedIndex = (id, index) => {
     const element = document.querySelector(id);
     element.setSelectedIndex = index;
 }
+
+function makPromiseCall(methodType, url, async = true, data = null) {
+    return new Promise(function (resolve, reject) {
+        let xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200 || xhr.status === 201) {
+                    resolve(xhr.responseText);
+                } else if (xhr.status >= 400) {
+                    reject({
+                        status: xhr.status,
+                        statusText: xhr.statusText
+                    });
+                    console.log("Handle 400 Client Error or 500 Server Error at: " + showTime());
+                }
+            }
+        }
+        
+        xhr.onerror = function () {
+            reject({
+                status: this.status,
+                statusText: xhttp.statusText
+            });
+        }
+        xhr.open(methodType, url, async);
+        if (data) {
+            console.log(JSON.stringify(data));
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(data));
+        } else xhr.send();
+        console.log(methodType + " request sent to the server at : " + showTime());
+    });
+  }

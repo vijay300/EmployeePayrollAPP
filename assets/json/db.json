@@ -1,52 +1,53 @@
 {
   "employee": [
     {
-      "name": "mohit kumar new",
-      "gender": "male",
-      "departMent": [
+      "_name": "mohit kumar test",
+      "_gender": "male",
+      "_department": [
         "HR"
       ],
-      "salary": "30000",
-      "startDate": "1 Jan 2020",
-      "notes": "",
-      "id": 1604589551457,
-      "profileUrl": "../assets/profile-images/Ellipse 1.png"
+      "_salary": "30000",
+      "_startDate": "1 Jan 2020",
+      "_notes": "",
+      "id": 2,
+      "_profilePic": "../assets/profile-images/Ellipse -1.png"
     },
     {
-      "name": "mohit kumar test",
-      "gender": "male",
-      "departMent": [
+      "_name": "mohit",
+      "_gender": "male",
+      "_department": [
         "HR"
       ],
-      "salary": "30000",
-      "startDate": "1 Jan 2020",
-      "notes": "",
-      "id": 1604589594363,
-      "profileUrl": "../assets/profile-images/Ellipse 1.png"
+      "_salary": "30000",
+      "_startDate": "1 Jan 2020",
+      "_notes": "",
+      "id": 3,
+      "_profilePic": "../assets/profile-images/Ellipse -3.png"
     },
     {
-      "name": "mohit",
-      "gender": "male",
-      "departMent": [
+      "_name": "test",
+      "_gender": "male",
+      "_department": [
         "HR"
       ],
-      "salary": "30000",
-      "startDate": "1 Jan 2020",
-      "notes": "",
-      "id": 1604589699566,
-      "profileUrl": "../assets/profile-images/Ellipse -3.png"
+      "_salary": "30000",
+      "_startDate": "1 Jan 2020",
+      "_notes": "",
+      "id": 4,
+      "_profilePic": "../assets/profile-images/Ellipse -3.png"
     },
     {
-      "name": "test",
-      "gender": "male",
-      "departMent": [
-        "HR"
+      "_name": "Vijay",
+      "_profilePic": "../assets//profile-images/Ellipse -3.png",
+      "_gender": "male",
+      "_department": [
+        "HR",
+        "Sales"
       ],
-      "salary": "30000",
-      "startDate": "1 Jan 2020",
-      "notes": "",
-      "id": 1604589731061,
-      "profileUrl": "../assets/profile-images/Ellipse -3.png"
+      "_salary": "500000",
+      "_note": "",
+      "_startDate": "1 January 2021",
+      "id": 5
     }
   ]
 }
